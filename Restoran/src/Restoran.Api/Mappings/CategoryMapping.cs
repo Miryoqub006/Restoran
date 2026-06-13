@@ -1,8 +1,7 @@
-﻿using RestaurantAPI.Dtos;
-using RestaurantAPI.Entities;
+using Restaurant.Api.Dtos;
 using Restaurant.Api.Entities;
 
-namespace RestaurantAPI.Mappings
+namespace Restaurant.Api.Mappings
 {
     public static class CategoryMapping
     {

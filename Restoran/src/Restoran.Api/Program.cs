@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Api.Data;
+using Restaurant.Api.Repositories;
 
 
 namespace Restaurant.Api
