@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestaurantAPI.Entities;
 using Restoran.Api.Entities;
 
 namespace RestaurantAPI.FluentApies
