@@ -17,17 +17,17 @@ namespace Restaurant.Api.Controllers
 
         // GET /api/foods
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FoodResponseDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAll()
         {
-            var foods = await _foodService.GetAllFoodsAsync();
+            var foods = await _foodService.GetAllAsync();
             return Ok(foods);
         }
 
         // GET /api/foods/{id}
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<FoodResponseDto>> GetById(int id)
+        [HttpGet("{id:long}")]
+        public async Task<ActionResult<FoodDto>> GetById(long id)
         {
-            var food = await _foodService.GetFoodByIdAsync(id);
+            var food = await _foodService.GetByIdAsync(id);
             if (food == null)
             {
                 return NotFound($"Id si {id} bo'lgan taom topilmadi.");
@@ -37,34 +37,34 @@ namespace Restaurant.Api.Controllers
 
         // POST /api/foods
         [HttpPost]
-        public async Task<ActionResult<FoodResponseDto>> Create([FromBody] FoodCreateDto dto)
+        public async Task<ActionResult<FoodDto>> Create([FromBody] FoodCreateDto dto)
         {
-            var createdFood = await _foodService.CreateFoodAsync(dto);
+            var createdFood = await _foodService.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = createdFood.Id }, createdFood);
         }
 
         // PUT /api/foods/{id}
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] FoodUpdateDto dto)
+        [HttpPut("{id:long}")]
+        public async Task<ActionResult<FoodDto>> Update(long id, [FromBody] FoodUpdateDto dto)
         {
-            var result = await _foodService.UpdateFoodAsync(id, dto);
-            if (!result)
+            var updatedFood = await _foodService.UpdateAsync(id, dto);
+            if (updatedFood == null)
             {
                 return NotFound($"Yangilash muvaffaqiyatsiz tugadi. Id si {id} bo'lgan taom topilmadi.");
             }
-            return NoContent(); // 204 No Content - muvaffaqiyatli yangilanganligini bildiradi
+            return Ok(updatedFood); // Yoki interfeys qaytargan yangi obyektni qaytaramiz
         }
 
         // DELETE /api/foods/{id}
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id:long}")]
+        public async Task<IActionResult> Delete(long id)
         {
-            var result = await _foodService.DeleteFoodAsync(id);
+            var result = await _foodService.DeleteAsync(id);
             if (!result)
             {
                 return NotFound($"O'chirish muvaffaqiyatsiz tugadi. Id si {id} bo'lgan taom topilmadi.");
             }
-            return NoContent();
+            return NoContent(); // 204 No Content
         }
     }
 }
