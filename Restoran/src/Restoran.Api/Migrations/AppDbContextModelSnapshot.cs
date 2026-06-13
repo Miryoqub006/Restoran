@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Restoran.Api.Data;
+using Restaurant.Api.Data;
 
 #nullable disable
 
-namespace Restoran.Api.Migrations
+namespace Restaurant.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -21,7 +21,7 @@ namespace Restoran.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Restoran.Api.Entities.Category", b =>
+            modelBuilder.Entity("Restaurant.Api.Entities.Category", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace Restoran.Api.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Restoran.Api.Entities.Food", b =>
+            modelBuilder.Entity("Restaurant.Api.Entities.Food", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,9 +70,9 @@ namespace Restoran.Api.Migrations
                     b.ToTable("Foods");
                 });
 
-            modelBuilder.Entity("Restoran.Api.Entities.Food", b =>
+            modelBuilder.Entity("Restaurant.Api.Entities.Food", b =>
                 {
-                    b.HasOne("Restoran.Api.Entities.Category", "Category")
+                    b.HasOne("Restaurant.Api.Entities.Category", "Category")
                         .WithMany("Foods")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -81,7 +81,7 @@ namespace Restoran.Api.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Restoran.Api.Entities.Category", b =>
+            modelBuilder.Entity("Restaurant.Api.Entities.Category", b =>
                 {
                     b.Navigation("Foods");
                 });

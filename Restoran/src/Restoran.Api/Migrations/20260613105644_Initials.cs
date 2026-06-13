@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Restoran.Api.Migrations
+namespace Restaurant.Api.Migrations
 {
     /// <inheritdoc />
     public partial class Initials : Migration

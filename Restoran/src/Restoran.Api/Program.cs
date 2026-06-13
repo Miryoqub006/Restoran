@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Restoran.Api.Data;
+using Restaurant.Api.Data;
 
-namespace Restoran.Api
+namespace Restaurant.Api
 {
     public class Program
     {

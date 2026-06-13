@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Restoran.Api.Entities;
+using Restaurant.Api.Entities;
 using System.Reflection;
 
-namespace Restoran.Api.Data;
+namespace Restaurant.Api.Data;
 
 public class AppDbContext : DbContext
 {
