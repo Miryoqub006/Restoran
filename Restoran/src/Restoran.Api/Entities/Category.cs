@@ -1,4 +1,4 @@
-namespace Restoran.Api.Entities
+namespace Restaurant.Api.Entities
 {
     public class Category
     {

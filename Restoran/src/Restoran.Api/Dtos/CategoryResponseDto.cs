@@ -1,8 +1,8 @@
-﻿namespace RestaurantAPI.Dtos
+namespace Restaurant.Api.Dtos
 {
     public class CategoryResponseDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }
