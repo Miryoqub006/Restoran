@@ -81,4 +81,19 @@ public class FoodService : IFoodService
         _logger.LogInformation("Food deleted: Id={FoodId}", id);
         return true;
     }
+
+    public Task<IEnumerable<FoodResponseDto>> GetFoodsByCategoryIdAsync(long categoryId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<FoodResponseDto>> GetAvailableFoodsAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<FoodResponseDto>> SearchFoodsByNameAsync(string name)
+    {
+        throw new NotImplementedException();
+    }
 }
