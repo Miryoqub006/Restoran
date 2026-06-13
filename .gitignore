@@ -427,3 +427,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Serilog / application log files
+[Ll]ogs/
+*.log
