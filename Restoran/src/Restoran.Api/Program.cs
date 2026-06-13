@@ -1,7 +1,10 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Api.Data;
 using Restaurant.Api.Repositories;
 using Restaurant.Api.Services;
+using Restaurant.Api.Validators;
 
 
 namespace Restaurant.Api
@@ -18,6 +21,8 @@ namespace Restaurant.Api
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IFoodRepository, FoodRepository>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddFluentValidationAutoValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<FoodCreateDtoValidator>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
