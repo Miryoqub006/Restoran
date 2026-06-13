@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Restaurant.Api.Entities;
 
-namespace RestaurantAPI.FluentApies
+namespace Restaurant.Api.Configurations
 {
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {

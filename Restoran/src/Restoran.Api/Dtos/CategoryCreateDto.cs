@@ -1,4 +1,4 @@
-﻿namespace RestaurantAPI.Dtos
+namespace Restaurant.Api.Dtos
 {
     public class CategoryCreateDto
     {
