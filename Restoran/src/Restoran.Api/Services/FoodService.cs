@@ -1,52 +1,84 @@
-﻿using Restaurant.Api.Dtos;
-using Restaurant.Api.Entities;
-using Restoran.Api.Repositories;
+using Restaurant.Api.Dtos;
+using Restaurant.Api.Repositories;
 
 namespace Restaurant.Api.Services;
 
 public class FoodService : IFoodService
 {
-    private readonly IFoodRepository _repository;
-    private readonly IMapper _mapper;
+    private readonly IFoodRepository _foodRepository;
+    private readonly ILogger<FoodService> _logger;
 
-    public FoodService(IFoodRepository repository, IMapper mapper)
+    public FoodService(IFoodRepository foodRepository, ILogger<FoodService> logger)
     {
-        _repository = repository;
-        _mapper = mapper;
+        _foodRepository = foodRepository;
+        _logger = logger;
     }
 
-    public async Task<IEnumerable<FoodDto>> GetAllAsync()
+    public async Task<IEnumerable<FoodResponseDto>> GetAllFoodsAsync()
     {
-        var foods = await _repository.GetAllAsync();
-        return _mapper.Map<IEnumerable<FoodDto>>(foods);
+        _logger.LogInformation("Fetching all foods");
+
+        var foods = (await _foodRepository.GetAllAsync()).ToList();
+
+        _logger.LogInformation("Returned {Count} foods", foods.Count);
+        return foods;
     }
 
-    public async Task<FoodDto?> GetByIdAsync(long id)
+    public async Task<FoodResponseDto?> GetFoodByIdAsync(long id)
     {
-        var food = await _repository.GetByIdAsync(id);
-        if (food is null) return null;
-        return _mapper.Map<FoodDto>(food);
+        var food = await _foodRepository.GetByIdAsync(id);
+        if (food is null)
+        {
+            _logger.LogWarning("Food not found: Id={FoodId}", id);
+            return null;
+        }
+
+        _logger.LogInformation("Food found: Id={FoodId}", id);
+        return food;
     }
 
-    public async Task<FoodDto> CreateAsync(FoodCreateDto dto)
+    public async Task<FoodResponseDto> CreateFoodAsync(FoodCreateDto dto)
     {
-        var food = _mapper.Map<Food>(dto);
-        var created = await _repository.CreateAsync(food);
-        return _mapper.Map<FoodDto>(created);
+        try
+        {
+            var created = await _foodRepository.CreateAsync(dto);
+
+            _logger.LogInformation(
+                "Food created: Id={FoodId}, Name={FoodName}, Price={Price}",
+                created.Id, created.Name, created.Price);
+
+            return created;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating food: Name={FoodName}", dto.Name);
+            throw;
+        }
     }
 
-    public async Task<FoodDto> UpdateAsync(long id, FoodUpdateDto dto)
+    public async Task<bool> UpdateFoodAsync(long id, FoodUpdateDto dto)
     {
-        var food = await _repository.GetByIdAsync(id);
-        if (food is null) throw new Exception($"Food with id {id} not found.");
+        var updated = await _foodRepository.UpdateAsync(id, dto);
+        if (updated is null)
+        {
+            _logger.LogWarning("Food to update not found: Id={FoodId}", id);
+            return false;
+        }
 
-        _mapper.Map(dto, food);
-        var updated = await _repository.UpdateAsync(food);
-        return _mapper.Map<FoodDto>(updated);
+        _logger.LogInformation("Food updated: Id={FoodId}", id);
+        return true;
     }
 
-    public async Task<bool> DeleteAsync(long id)
+    public async Task<bool> DeleteFoodAsync(long id)
     {
-        return await _repository.DeleteAsync(id);
+        var deleted = await _foodRepository.DeleteAsync(id);
+        if (!deleted)
+        {
+            _logger.LogWarning("Food to delete not found: Id={FoodId}", id);
+            return false;
+        }
+
+        _logger.LogInformation("Food deleted: Id={FoodId}", id);
+        return true;
     }
 }

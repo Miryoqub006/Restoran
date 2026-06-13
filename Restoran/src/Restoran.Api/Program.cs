@@ -34,6 +34,7 @@ namespace Restaurant.Api
                 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
                 builder.Services.AddScoped<IFoodRepository, FoodRepository>();
                 builder.Services.AddScoped<ICategoryService, CategoryService>();
+                builder.Services.AddScoped<IFoodService, FoodService>();
 
                 builder.Services.AddControllers();
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
