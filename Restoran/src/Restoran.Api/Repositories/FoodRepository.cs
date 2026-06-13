@@ -1,7 +1,10 @@
-﻿using Restoran.Api.Data;
-using Restoran.Api.Entities;
+using Microsoft.EntityFrameworkCore;
+using Restaurant.Api.Data;
+using Restaurant.Api.Dtos;
+using Restaurant.Api.Entities;
+using Restaurant.Api.Mappings;
 
-namespace Restoran.Api.Repositories;
+namespace Restaurant.Api.Repositories;
 
 public class FoodRepository : IFoodRepository
 {
@@ -12,34 +15,54 @@ public class FoodRepository : IFoodRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Food>> GetAllAsync()
+    public async Task<IEnumerable<FoodResponseDto>> GetAllAsync()
     {
-        return await _context.Foods.ToListAsync();
+        var foods = await _context.Foods
+            .Include(f => f.Category)
+            .ToListAsync();
+        return foods.Select(f => f.ToResponseDto());
     }
 
-    public async Task<Food?> GetByIdAsync(long id)
+    public async Task<FoodResponseDto?> GetByIdAsync(long id)
     {
-        return await _context.Foods.FirstOrDefaultAsync(x => x.Id == id);
+        var food = await _context.Foods
+            .Include(f => f.Category)
+            .FirstOrDefaultAsync(f => f.Id == id);
+        return food?.ToResponseDto();
     }
 
-    public async Task<Food> CreateAsync(Food food)
+    public async Task<FoodResponseDto> CreateAsync(FoodCreateDto foodDto)
     {
+        var food = foodDto.ToEntity();
         await _context.Foods.AddAsync(food);
         await _context.SaveChangesAsync();
-        return food;
+
+        var createdFood = await _context.Foods
+            .Include(f => f.Category)
+            .FirstOrDefaultAsync(f => f.Id == food.Id);
+
+        return createdFood!.ToResponseDto();
     }
 
-    public async Task<Food> UpdateAsync(Food food)
+    public async Task<FoodResponseDto?> UpdateAsync(long id, FoodUpdateDto foodDto)
     {
-        _context.Foods.Update(food);
+        var food = await _context.Foods.FindAsync(id);
+        if (food == null) return null;
+
+        foodDto.UpdateEntity(food);
         await _context.SaveChangesAsync();
-        return food;
+
+        var updatedFood = await _context.Foods
+            .Include(f => f.Category)
+            .FirstOrDefaultAsync(f => f.Id == food.Id);
+
+        return updatedFood?.ToResponseDto();
     }
 
     public async Task<bool> DeleteAsync(long id)
     {
-        var food = await GetByIdAsync(id);
-        if (food is null) return false;
+        var food = await _context.Foods.FindAsync(id);
+        if (food == null) return false;
 
         _context.Foods.Remove(food);
         await _context.SaveChangesAsync();
